@@ -1,0 +1,29 @@
+{
+    "name": "osaris-uk/log-viewer",
+    "description": "Log viewer for Laravel",
+    "authors": [
+        {
+            "name": "Osaris UK",
+            "email": "contact@osaris.co.uk"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php" : "^7.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "OsarisUk\\LogViewer\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "OsarisUk\\LogViewer\\LogViewerServiceProvider"
+            ]
+        }
+    }
+}

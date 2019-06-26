@@ -18,7 +18,7 @@ class LogViewerServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/views' => resource_path('views/vendor/osaris-uk/log-viewer'),
+            __DIR__.'/views' => resource_path('views/vendor/log-viewer'),
         ], 'views');
 
         $this->loadViewsFrom(__DIR__.'/views', 'log-viewer');

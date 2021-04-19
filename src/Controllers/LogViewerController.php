@@ -2,6 +2,7 @@
 
 namespace OsarisUk\LogViewer\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -54,7 +55,25 @@ class LogViewerController extends Controller
     {
         $files = glob(storage_path('logs/*'));
         $files = array_combine($files, array_map('filemtime', $files));
-        arsort($files);
+
+        // Remove files with no content
+        foreach ($files as $key => $file) {
+            if (filesize($key) == 0) {
+                unset($files[$key]);
+            }
+        }
+
+        // Sort by datestamp in title
+        uksort($files, function($a, $b) {
+            $pattern = "/\d{4}-\d{2}-\d{2}/";
+            if (!preg_match($pattern, $a, $match_a)) {
+                $match_a = [0 => null];
+            }
+            if (!preg_match($pattern, $b, $match_b)) {
+                $match_b = [0 => null];
+            }
+            return Carbon::parse($match_b[0]) <=> Carbon::parse($match_a[0]);
+        });
 
         $files = array_map('basename', array_keys($files));
 
@@ -71,7 +90,13 @@ class LogViewerController extends Controller
     public function getLogContents($file)
     {
         if(file_exists(storage_path('logs/' . $file))) {
-            $raw = file_get_contents(storage_path('logs/' . $file));
+            if (pathinfo(storage_path('logs/' . $file), PATHINFO_EXTENSION) == 'gz') {
+                $gzsize = filesize(storage_path('logs/' . $file));
+                $log = gzopen(storage_path('logs/' . $file), 'r');
+                $raw = gzread($log, $gzsize * 50);
+            } else {
+                $raw = file_get_contents(storage_path('logs/' . $file));
+            }
         } else {
             $raw = null;
         }

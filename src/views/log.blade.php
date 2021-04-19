@@ -36,7 +36,7 @@
                                             <td nowrap>{{ $entry['env'] }}</td>
                                             <td nowrap>{{ $entry['time'] }}</td>
                                             <td><code>{{ $entry['info'] }}</code></td>
-                                            <td><button type="button" class="btn btn-secondary btn-sm" data-toggle="collapse" data-target=".trace-{{ $key }}" {!! $entry['trace'] ? '' : 'title="No Stack Trace Available" disabled' !!}>Stack Trace</button></td>
+                                            <td>@if($entry['trace'])<button type="button" class="btn btn-secondary btn-sm" data-toggle="collapse" data-target=".trace-{{ $key }}">Stack Trace</button>@endif</td>
                                         </tr>
                                         <tr class="trace-{{ $key }} collapse" aria-expanded="false">
                                             <td colspan="5">
